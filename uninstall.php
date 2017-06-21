@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
  *
@@ -30,5 +29,4 @@ delete_option($option_name);
 
 // for site options in Multisite
 delete_site_option($option_name);
-
 ?>
