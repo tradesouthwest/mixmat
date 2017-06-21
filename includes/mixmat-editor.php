@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The plugin form rendering file
  *
@@ -244,8 +243,8 @@ function mixmat_render_media_buttons() {
 }
 
 
-if ( !function_exists('wpex_fix_shortcodes') ) {
-    function wpex_fix_shortcodes($content){
+if ( !function_exists('mixmat_fix_shortcodes') ) {
+    function mixmat_fix_shortcodes($content){
         $array = array (
             '<p>[' => '[',
             ']</p>' => ']',
@@ -254,5 +253,5 @@ if ( !function_exists('wpex_fix_shortcodes') ) {
         $content = strtr($content, $array);
         return $content;
     }
-    add_filter('the_content', 'wpex_fix_shortcodes');
+    add_filter('the_content', 'mixmat_fix_shortcodes');
 }
