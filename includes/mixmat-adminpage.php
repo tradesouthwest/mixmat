@@ -24,15 +24,32 @@ add_action( 'admin_init', 'mixmat_settings_init' );
         );
     }
 
+/**
+ * Provides a default value for the theme layout setting.
+ *
+ * @since    1.0.2
+ */
+function mixmat_options_defaults() {
+    $defaults = array (
+    'mixmat_color_field_0' => '',
+    'mixmat_color_field_1' => ''
+);
 
-    /**
-      * Register settings for options page
-      *
-      * @since    1.0.0
-      */
-    function mixmat_settings_init() {
+return apply_filters ( 'mixmat_settings', $defaults );
+}
 
-    register_setting( 'mixmat_admin_pluginPage', 'mixmat_settings' );
+/**
+  * Register settings for options page
+  *
+  * @since    1.0.1
+  */
+function mixmat_settings_init() {
+    
+    if( false == get_option( 'mixmat_settings' ) ) {
+		add_option( 'mixmat_settings', 
+		apply_filters( 'mixmat_settings_init', mixmat_options_defaults() ) );
+	} // end if
+    
 
     add_settings_section(
         'mixmat_pluginPage_section',
@@ -41,6 +58,7 @@ add_action( 'admin_init', 'mixmat_settings_init' );
         'mixmat_admin_pluginPage'
     );
 
+    //$id, $title, $callback, $page, $section = 'default', $args = array()
     add_settings_field(
         'mixmat_color_field_0',
         __( 'Select Background Color', 'mixmat' ),
@@ -48,6 +66,16 @@ add_action( 'admin_init', 'mixmat_settings_init' );
         'mixmat_admin_pluginPage',
         'mixmat_pluginPage_section'
     );
+    
+    add_settings_field(
+        'mixmat_color_field_1',
+        __( 'Select Boxshadow Color', 'mixmat' ),
+        'mixmat_color_field_1_render',
+        'mixmat_admin_pluginPage',
+        'mixmat_pluginPage_section'
+    );
+    
+    register_setting( 'mixmat_admin_pluginPage', 'mixmat_settings' );
     }
 
 
@@ -64,9 +92,24 @@ add_action( 'admin_init', 'mixmat_settings_init' );
     ?>
 
     <input name="mixmat_settings[mixmat_color_field_0]" type="text"
-            id="mixmat_color" value="<?php echo esc_attr( $mxmtcolor ); ?>">
+            id="mixmat_color" value="<?php echo esc_attr( $mxmtcolor ); ?>"><br><hr>
 
     <?php
+
+    }
+    function mixmat_color_field_1_render(  ) {
+
+        $options = get_option( 'mixmat_settings' );
+        $mxmtshado = $options['mixmat_color_field_1'];
+    ?>
+
+    <input name="mixmat_settings[mixmat_color_field_1]" type="text"
+            id="mixmat_shado" value="<?php echo esc_attr( $mxmtshado ); ?>">
+
+    <?php 
+    echo "<p>";
+    esc_html_e( 'To remove text shadow open the Select Color and tick Clear', 'mixmat' );
+    echo "</p><br><hr>"; 
 
     }
 
@@ -89,7 +132,7 @@ add_action( 'admin_init', 'mixmat_settings_init' );
         echo '<div id="mxmtWrap" class="wrap">';
         echo '<p><hr></p><h1><span class="dashicons dashicons-admin-settings" style="font-size: 24px">
         </span> '; esc_html_e( ' MixMat PageMixer', 'mixmat' );
-        echo '</h1><table class="widefat"><tbody><tr><td>';
+        echo '</h1><table class="table"><tbody><tr><td>';
         ?>
 
         <form action='options.php' method='post'>
@@ -102,6 +145,7 @@ add_action( 'admin_init', 'mixmat_settings_init' );
         ?>
 
         </form></td></tr></tbody></table>
+        
         <?php
         echo mixmat_display_admin_instructions();
         echo '</div>';
@@ -125,7 +169,7 @@ $admHtml .= __( 'Page Sections Builder Information', 'mixmat' );
 $admHtml .= '</h2>';
 $admHtml .= '<table class="widefat">
 <thead>
-<tr><th>Shortcode</th>  <th>Property</th>        <th>Real code class</th><th>Width</th></tr></thead><tbody>
+<tr><th>Shortcode</th>  <th>Property</th>        <th>Real code class/selector</th><th>Width</th></tr></thead><tbody>
 <tr><td>[one][/one]</td><td>Spans full width</td><td>mxmt_one</td>       <td>100&percnt;</td></tr>
 <tr><td>[one_half][/one_half]</td><td>Spans half width</td><td>mxmt_one_half</td>       <td>50&percnt;</td></tr>
 <tr><td>[one_third][/one_third]</td><td>One third of a row</td><td>mxmt_one_third</td><td>33.33&percnt;</td></tr>
@@ -179,15 +223,31 @@ $admHtml .= '<hr>';
 
 /**
  * Send css to head
+ * @since 1.0.0
  */
 function mixmat_display_options_css() {
 
         echo '<style type="text/css">';
-
+        
         $options = get_option( 'mixmat_settings' );
         $mxmtcolor = $options['mixmat_color_field_0'];
-        echo '[class^="mxmt_"] { background: ' . $mxmtcolor . ';}';
-        echo '</style>';
+        $mxmtshado = $options['mixmat_color_field_1'];
+        
+        echo '[class^="mxmt_"]{';
+        
+        if( !empty ( $mxmtcolor ) ) : 
+        echo 'background: ' . $mxmtcolor . ';';
+        else : 
+        echo 'background: transparent;';
+        endif; 
+        
+        
+        if( !empty ( $mxmtshado ) ) : 
+        echo 'box-shadow: 0 1px 2px ' . $mxmtshado . ';';
+        else : 
+        echo 'box-shadow: none;';
+        endif; 
+        echo '}</style>';
 
 }
 add_action( 'wp_head', 'mixmat_display_options_css' );
