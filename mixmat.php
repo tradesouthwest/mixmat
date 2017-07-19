@@ -3,17 +3,15 @@
  * Plugin Name:       MixMat
  * Plugin URI:        http://themes.tradesouthwest.com/wordpress/plugins/mixmat
  * Description:       Mixmat Page Mixer gives editors an easy way to sectionalize the posts and pages without knowing CSS or HTML.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Larry Judd
  * Author URI:        http://tradesouthwest.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       mixmat
  * Domain Path:       /languages
- *
  * @wordpress-plugin
  * @link              http://tradesouthwest.com
- * @since             1.0.1
  * @package           Mixmat
  *
  */
@@ -21,18 +19,6 @@
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
     die;
-}
-
-function mixmat_php_version_notice() {
-        $class = 'notice notice-error';
-        $message = __( 'MixMat Page Mixer for WordPress</strong> requires PHP version 5.3 or later.
-        You are running PHP version ' . PHP_VERSION . '. Please upgrade to a supported version of PHP.',
-        'mixmat' );
-        printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
-    }
-    //Only run this if the PHP version is less than 5.3
-    if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-        add_action( 'admin_notices', 'mixmat_php_version_notice' );
 }
 
 /** Important constants
@@ -51,8 +37,6 @@ define( 'MIXMAT_URL', plugin_dir_url(__FILE__));
 //activate/deactivate hooks
 function mixmat_plugin_activation() {
 
-    mixmat_php_version_notice();
-
         return false;
 
 }
@@ -67,7 +51,7 @@ function mixmat_plugin_deactivation() {
 }
 
 //https://codex.wordpress.org/Shortcode_API
-function mixmat_deregister_shortcode(){
+function mixmat_deregister_shortcode() {
 
     //shortcode_atts( $pairs, $atts )
 
