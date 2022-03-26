@@ -29,6 +29,7 @@ add_filter( 'the_content', 'shortcode_unautop',100 );
  * @param string $content
  * @return string
  */
+
 function mixmat_shortcode_callback_one( $atts = null, $content = null ) {
     $defaults = array();
     $settings = shortcode_atts( $defaults, wp_parse_args( $atts ) );
@@ -36,9 +37,6 @@ function mixmat_shortcode_callback_one( $atts = null, $content = null ) {
     $output = '<div class="mxmt_one">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init', 'mixmat_shortcode_callback_one' );
-add_shortcode( 'one',  'mixmat_shortcode_callback_one' );
-
 
 // 1/2
 function mixmat_shortcode_callback_one_half( $atts = null, $content = null ) {
@@ -48,9 +46,6 @@ function mixmat_shortcode_callback_one_half( $atts = null, $content = null ) {
     $output = '<div class="mxmt_one_half">' . shortcode_unautop ( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_one_half' );
-add_shortcode( 'one_half',  'mixmat_shortcode_callback_one_half' );
-
 
 //1/4
 function mixmat_shortcode_callback_one_fourth( $atts = null, $content = null ) {
@@ -60,9 +55,6 @@ function mixmat_shortcode_callback_one_fourth( $atts = null, $content = null ) {
     $output = '<div class="mxmt_one_fourth">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_one_fourth' );
-add_shortcode( 'one_fourth',  'mixmat_shortcode_callback_one_fourth' );
-
 
 //1/3
 function mixmat_shortcode_callback_one_third( $atts = null, $content = null ) {
@@ -72,9 +64,6 @@ function mixmat_shortcode_callback_one_third( $atts = null, $content = null ) {
     $output = '<div class="mxmt_one_third">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_one_third' );
-add_shortcode( 'one_third',  'mixmat_shortcode_callback_one_third' );
-
 
 //2/3
 function mixmat_shortcode_callback_two_thirds( $atts = null, $content = null ) {
@@ -84,8 +73,8 @@ function mixmat_shortcode_callback_two_thirds( $atts = null, $content = null ) {
     $output = '<div class="mxmt_two_thirds">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_one_third' );
-add_shortcode( 'two_thirds',  'mixmat_shortcode_callback_two_thirds' );
+//add_action( 'init',  'mixmat_shortcode_callback_one_third' );
+
 
 
 //3/4
@@ -96,8 +85,8 @@ function mixmat_shortcode_callback_three_fourths( $atts = null, $content = null 
     $output = '<div class="mxmt_three_fourths">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_three_fourths' );
-add_shortcode( 'three_fourths',  'mixmat_shortcode_callback_three_fourths' );
+//add_action( 'init',  'mixmat_shortcode_callback_three_fourths' );
+
 
 
 //last one half
@@ -108,9 +97,6 @@ function mixmat_shortcode_callback_last_one_half( $atts = null, $content = null 
     $output = '<div class="mxmt_last_one_half">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_last_one_half' );
-add_shortcode( 'last_one_half',  'mixmat_shortcode_callback_last_one_half' );
-
 
 //last_one_fourth
 function mixmat_shortcode_callback_last_one_fourth( $atts = null, $content = null ) {
@@ -120,9 +106,6 @@ function mixmat_shortcode_callback_last_one_fourth( $atts = null, $content = nul
     $output = '<div class="mxmt_last_one_fourth">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_last_one_fourth' );
-add_shortcode( 'last_one_fourth',  'mixmat_shortcode_callback_last_one_fourth' );
-
 
 // last 1/3
 function mixmat_shortcode_callback_last_one_third( $atts = null, $content = null ) {
@@ -132,9 +115,6 @@ function mixmat_shortcode_callback_last_one_third( $atts = null, $content = null
     $output = '<div class="mxmt_last_one_third">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_last_one_third' );
-add_shortcode( 'last_one_third',  'mixmat_shortcode_callback_last_one_third' );
-
 
 //2/3
 function mixmat_shortcode_callback_last_two_thirds( $atts = null, $content = null ) {
@@ -144,9 +124,6 @@ function mixmat_shortcode_callback_last_two_thirds( $atts = null, $content = nul
     $output = '<div class="mxmt_last_two_thirds">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_last_two_thirds' );
-add_shortcode( 'last_two_thirds',  'mixmat_shortcode_callback_last_two_thirds' );
-
 
 //3/4
 function mixmat_shortcode_callback_last_three_fourths( $atts = null, $content = null ) {
@@ -156,8 +133,6 @@ function mixmat_shortcode_callback_last_three_fourths( $atts = null, $content = 
     $output = '<div class="mxmt_last_three_fourths">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_last_three_fourths' );
-add_shortcode( 'last_three_fourths',  'mixmat_shortcode_callback_last_three_fourths' );
 
 //0/0
 function mixmat_shortcode_callback_empty_row( $atts = null, $content = null ) {
@@ -167,9 +142,6 @@ function mixmat_shortcode_callback_empty_row( $atts = null, $content = null ) {
     $output = '<div class="mxmt_empty_row">' . shortcode_unautop( $content ) . '</div>';
     return $output;
 }
-add_action( 'init',  'mixmat_shortcode_callback_empty_row' );
-add_shortcode( 'empty_row',  'mixmat_shortcode_callback_empty_row' );
-
 
 /**
  * Utility to add MCE Popup fired by custom Media Buttons button
@@ -182,7 +154,7 @@ function mixmat_render_mce_popup() {
 
             <div>
                 <div style="padding:15px 15px 0 15px;">
-                    <h5>Mixmat PageMixer Shortcode Reference</h5>
+                    <h5><?php esc_html_e('Mixmat PageMixer Shortcode Reference','mixmat'); ?></h5>
 
             <table class="widefat" id="mxmtList">
             <tr><td> [one][/one] </td></tr>
@@ -208,7 +180,7 @@ Copy then Paste into Your Editor exactly where you want it placed. [one]My cool 
                     <input type="button" class="button-primary" value="Insert Shortcode"
                     onclick="InsertContainer()" name="submit" />&nbsp;&nbsp;&nbsp; -->
                     <a class="button" href="#" onclick="tb_remove();
-                            return false;">Close</a>
+                            return false;"><?php esc_html_e('Close', 'mixmat'); ?></a>
                 </div>
                 <div class="mxmt-footer">
                     <h5><?php esc_html_e( 'Examples', 'mixmat' ); ?></h5>

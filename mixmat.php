@@ -3,7 +3,7 @@
  * Plugin Name:       MixMat
  * Plugin URI:        http://themes.tradesouthwest.com/wordpress/plugins/mixmat
  * Description:       Mixmat Page Mixer gives editors an easy way to sectionalize the posts and pages without knowing CSS or HTML.
- * Version:           1.0.2
+ * Version:           1.0.61
  * Author:            Larry Judd
  * Author URI:        http://tradesouthwest.com
  * License:           GPL-2.0+
@@ -96,7 +96,7 @@ function mixmat_scripts() {
 add_action( 'wp_enqueue_scripts', 'mixmat_scripts' );
 
 //load admin scripts as well
-add_action( 'admin_init', 'mixmat_scripts' );
+add_action( 'admin_enqueue_scripts', 'mixmat_scripts' );
 
 //activate and deactivate registered
 register_activation_hook( __FILE__, 'mixmat_plugin_activation');
@@ -104,4 +104,20 @@ register_deactivation_hook( __FILE__, 'mixmat_plugin_deactivation');
 
 //include admin and public views
 require ( plugin_dir_path( __FILE__ ) . 'includes/mixmat-adminpage.php' ); 
+
+add_action( 'init', 'mixmat_register_shortcodes_init');
+function mixmat_register_shortcodes_init(){
+    add_shortcode( 'one',  'mixmat_shortcode_callback_one' );
+    add_shortcode( 'one_half',  'mixmat_shortcode_callback_one_half' );
+    add_shortcode( 'one_fourth',  'mixmat_shortcode_callback_one_fourth' );
+    add_shortcode( 'one_third',  'mixmat_shortcode_callback_one_third' );
+    add_shortcode( 'two_thirds',  'mixmat_shortcode_callback_two_thirds' );
+    add_shortcode( 'three_fourths',  'mixmat_shortcode_callback_three_fourths' );
+    add_shortcode( 'last_one_half',  'mixmat_shortcode_callback_last_one_half' );
+    add_shortcode( 'last_one_fourth',  'mixmat_shortcode_callback_last_one_fourth' );
+    add_shortcode( 'last_one_third',  'mixmat_shortcode_callback_last_one_third' );
+    add_shortcode( 'last_two_thirds',  'mixmat_shortcode_callback_last_two_thirds' );
+    add_shortcode( 'last_three_fourths',  'mixmat_shortcode_callback_last_three_fourths' );
+    add_shortcode( 'empty_row',  'mixmat_shortcode_callback_empty_row' );
+}
 ?>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -32,16 +32,16 @@ add_action( 'admin_init', 'mixmat_settings_init' );
 function mixmat_options_defaults() {
     $defaults = array (
     'mixmat_color_field_0' => '',
-    'mixmat_color_field_1' => ''
-);
-
-return apply_filters ( 'mixmat_settings', $defaults );
+    'mixmat_color_field_1' => '',
+    'mixmat_theme_margins_option' => 10
+    );
+        return apply_filters ( 'mixmat_settings', $defaults );
 }
 
 /**
   * Register settings for options page
   *
-  * @since    1.0.1
+  * @since    1.0.51
   */
 function mixmat_settings_init() {
     
@@ -74,8 +74,24 @@ function mixmat_settings_init() {
         'mixmat_admin_pluginPage',
         'mixmat_pluginPage_section'
     );
-    
-    register_setting( 'mixmat_admin_pluginPage', 'mixmat_settings' );
+
+    add_settings_field(
+        'mixmat_theme_adjustment_option',
+        __( 'Alternate Theme Adjustment', 'mixmat' ),
+        'mixmat_theme_adjustment_option_render',
+        'mixmat_admin_pluginPage',
+        'mixmat_pluginPage_section'
+    );
+
+    add_settings_field(
+        'mixmat_theme_margins_option',
+        __( 'Alternate Margins Adjustment (pxs)', 'mixmat' ),
+        'mixmat_theme_margins_option_render',
+        'mixmat_admin_pluginPage',
+        'mixmat_pluginPage_section'
+    );
+
+        register_setting( 'mixmat_admin_pluginPage', 'mixmat_settings' );
     }
 
 
@@ -86,13 +102,14 @@ function mixmat_settings_init() {
      * @options mixmat-settings
      */
     function mixmat_color_field_0_render(  ) {
-
+        
         $options = get_option( 'mixmat_settings' );
-        $mxmtcolor = $options['mixmat_color_field_0'];
+        $mxmtcolor = empty($options['mixmat_color_field_0']) ? '#fafafa' 
+                    : $options['mixmat_color_field_0'];
     ?>
 
     <input name="mixmat_settings[mixmat_color_field_0]" type="text"
-            id="mixmat_color" value="<?php echo esc_attr( $mxmtcolor ); ?>"><br><hr>
+            id="mixmat_color" value="<?php echo esc_attr( $mxmtcolor ); ?>">
 
     <?php
 
@@ -100,7 +117,8 @@ function mixmat_settings_init() {
     function mixmat_color_field_1_render(  ) {
 
         $options = get_option( 'mixmat_settings' );
-        $mxmtshado = $options['mixmat_color_field_1'];
+        $mxmtshado = empty($options['mixmat_color_field_1']) ? '#cdcdcd' 
+                    : $options['mixmat_color_field_1'];
     ?>
 
     <input name="mixmat_settings[mixmat_color_field_1]" type="text"
@@ -109,7 +127,49 @@ function mixmat_settings_init() {
     <?php 
     echo "<p>";
     esc_html_e( 'To remove text shadow open the Select Color and tick Clear', 'mixmat' );
-    echo "</p><br><hr>"; 
+    echo "</p>"; 
+
+    }
+    /**
+     * Wide theme option render
+     * @since 1.0.5
+     */
+    function mixmat_theme_adjustment_option_render(  ) {
+
+        $options = get_option( 'mixmat_settings' );
+        $mxmtchk = (empty($options['mixmat_theme_adjustment_option'])) 
+                    ? 0 : $options['mixmat_theme_adjustment_option'];
+    ?>
+    <input type="hidden" name="mixmat_settings[mixmat_theme_adjustment_option]" 
+    value="0" />
+    <input name="mixmat_settings[mixmat_theme_adjustment_option]" 
+           value="1" 
+           type="checkbox" <?php echo esc_attr( 
+           checked( 1, $mxmtchk, false ) ); ?> /> 	
+
+    <?php 
+    echo "<p>";
+    esc_html_e( 'Some themes may render the four box width ([one_fourth]) too thin. Try this to make them two wide.', 'mixmat' );
+    echo "</p>"; 
+
+    }
+     /**
+     * Wide theme option render
+     * @since 1.0.5
+     */
+    function mixmat_theme_margins_option_render(  ) {
+
+        $options = get_option( 'mixmat_settings' );
+        $mxmtmrg = (empty($options['mixmat_theme_margins_option'])) 
+                    ? 10 : $options['mixmat_theme_margins_option'];
+    ?>
+    <input name="mixmat_settings[mixmat_theme_margins_option]" value="<?php echo absint($mxmtmrg); ?>" 
+           type="number" min="0" max="320" step="1" /> 	
+
+    <?php 
+    echo "<p>";
+    esc_html_e( 'This setting changes the amount of vertical space between boxes. Set to 0 to no spacing (on desktop).', 'mixmat' );
+    echo "</p>"; 
 
     }
 
@@ -121,9 +181,8 @@ function mixmat_settings_init() {
 
     }
 
-
     /**
-     * Render a mixmat option on Page.
+     * Render mixmat options on Admin Page.
      *
      * @since    1.0.0
      */
@@ -223,15 +282,21 @@ $admHtml .= '<hr>';
 
 /**
  * Send css to head
- * @since 1.0.0
+ * Theme width adjustment options
+ * @since 1.0.5
  */
 function mixmat_display_options_css() {
 
-        echo '<style type="text/css">';
+    ob_start();    
         
-        $options = get_option( 'mixmat_settings' );
+        $options   = get_option( 'mixmat_settings' );
         $mxmtcolor = $options['mixmat_color_field_0'];
         $mxmtshado = $options['mixmat_color_field_1'];
+        $mxmtchk   = (empty($options['mixmat_theme_adjustment_option']) ) 
+                      ? 0 : $options['mixmat_theme_adjustment_option'];
+        $mxmtmrg   = (empty($options['mixmat_theme_margins_option'])) 
+                     ? 10 : $options['mixmat_theme_margins_option'];
+        
         
         echo '[class^="mxmt_"]{';
         
@@ -247,11 +312,29 @@ function mixmat_display_options_css() {
         else : 
         echo 'box-shadow: none;';
         endif; 
-        echo '}</style>';
 
+        echo '}';
+
+        if ( $mxmtchk != 0 ) :  
+        echo '@media screen and (min-width: 768px) and (max-width: 992px){
+        .mxmt_one_fourth,.mxmt_last_one_fourth{width: 48%;}}';
+        endif;
+
+        if ( $mxmtmrg > 0 ) :  
+        echo '@media screen and (min-width: 711px){.mxmt_empty_row, .mxmt_one, .mxmt.mxmt_one_fourth, .mxmt_one_third, .mxmt_one_half, .mxmt_two_thirds, .mxmt_three_fourths,
+        .mxmt_last_one_fourth, .mxmt_last_one_third, .mxmt_last_one_half,.mxmt_last_two_thirds, 
+        .mxmt_last_three_fourths{margin-bottom: '. $mxmtmrg .'px;}}';
+        endif;
+    
+    $styles = ob_get_clean();
+
+    wp_register_style( 'mixmat-entry-set', false );
+    wp_enqueue_style(   'mixmat-entry-set' );
+    wp_add_inline_style( 'mixmat-entry-set', $styles );
 }
-add_action( 'wp_head', 'mixmat_display_options_css' );
+add_action( 'wp_enqueue_scripts', 'mixmat_display_options_css');
 
+//add_action( 'wp_head', 'mixmat_display_options_css' );
 
 //tinyMCE editor functions
-require plugin_dir_path( __FILE__ ) . 'mixmat-editor.php';
+require plugin_dir_path( __FILE__ ) . 'mixmat-editor.php'; 
